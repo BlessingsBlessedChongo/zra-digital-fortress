@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  ai-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: zra-ai-service
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=True
+      - DJANGO_SETTINGS_MODULE=ai_service.settings
+      - SECRET_KEY=zra-ai-service-development-key-2024
+      - DATABASE_URL=sqlite:///db.sqlite3
+    volumes:
+      - .:/app
+      - ./db.sqlite3:/app/db.sqlite3
+    networks:
+      - zra-network
+    healthcheck:
+      test: ["CMD", "python", "manage.py", "check"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # PostgreSQL for production (optional)
+  postgres:
+    image: postgres:13
+    container_name: zra-postgres
+    environment:
+      - POSTGRES_DB=zra_ai
+      - POSTGRES_USER=zra_user
+      - POSTGRES_PASSWORD=zra_password
+    ports:
+      - "5432:5432"
+    networks:
+      - zra-network
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
+networks:
+  zra-network:
+    driver: bridge

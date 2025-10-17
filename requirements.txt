@@ -1,0 +1,10 @@
+Django==5.1.1
+djangorestframework==3.15.2
+django-cors-headers==4.4.0
+python-decouple==3.8
+numpy>=2.0.0
+scikit-learn>=1.5.0
+pandas>=2.2.2
+requests>=2.32.3
+python-dateutil>=2.9.0
+uuid>=1.30
